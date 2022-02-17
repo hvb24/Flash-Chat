@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ChatScreen extends StatefulWidget {
   static const String id = '/chatloginScreen';
 
-
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -19,12 +18,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   String messageText;
   var messages1;
-  final CollectionReference  = FirebaseFirestore.instance.collection('messages');
-  String sender="";
-  String text="";
-
-
-
+  final CollectionReference = FirebaseFirestore.instance.collection('messages');
+  String sender = "";
+  String text = "";
 
   @override
   //INIT
@@ -33,7 +29,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
     getCurrentUser();
   }
-
 
   void getCurrentUser() async {
     try {
@@ -47,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-   getMessages() async {
+  getMessages() async {
     final messages = await _firestore.collection('messages').get();
 
     await for (var snapshot in _firestore.collection('messages').snapshots()) {
@@ -57,16 +52,13 @@ class _ChatScreenState extends State<ChatScreen> {
     }
     return messages;
   }
-  showMessage(){
 
-    Map<String,String> msg = {
+  showMessage() {
+    Map<String, String> msg = {
       "sender": sender,
       "text": text,
-
     };
   }
-
-
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,29 +83,26 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(stream: _firestore.collection('messages').snapshots(),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _firestore.collection('messages').snapshots(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError){
-                    return Text('Something went wrong');
-
-                  } else if(snapshot.hasData|| snapshot.data!=null) {
-                     final messages = snapshot.data?.docs;
-                  ListView.builder(itemBuilder: (BuildContext context, int index){
-
-                   
-                    QueryDocumentSnapshot<Object> documentSnapshot =
-                    snapshot.data?.docs[index];
-                    return Dismissible(key: Key(index.toString()),
-                        child: Card(
-                      elevation: 4,
-                      child: ListTile(
-
-                        title: Text((messages != null) ? (messages[index]["sender"]):""),
-                        subtitle: Text("papa"),
-                      ) ,
-                    ));
-                  });
-
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('Loading');
+                  } else {
+                    final messages = snapshot.data?.docs;
+                    return ListView.builder(
+                        itemCount: messages.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Dismissible(
+                              key: Key(index.toString()),
+                              child: Card(
+                                elevation: 4,
+                                child: ListTile(
+                                  title: Text(messages[index].id),
+                                  subtitle: Text("papa"),
+                                ),
+                              ));
+                        });
 
                     // List<Text> messageWidgets = [];
                     // for (var message in messages) { final messageText = message["text"];
@@ -122,21 +111,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     // messageWidgets.add(messageWidget);
                     // }
 
-
                     // return Column( children: messageWidgets, );
                   }
-
-
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Colors.black,
-                      ),
-                    ),
-                  );
-
-
-                },),
+                },
+              ),
             ),
             Container(
               decoration: kMessageContainerDecoration,
