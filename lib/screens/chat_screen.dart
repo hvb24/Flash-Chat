@@ -96,10 +96,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   if (snapshot.hasError){
                     return Text('Something went wrong');
 
-                  } else if(!snapshot.hasData|| snapshot.data!=null) {
+                  } else if(snapshot.hasData|| snapshot.data!=null) {
+                     final messages = snapshot.data?.docs;
                   ListView.builder(itemBuilder: (BuildContext context, int index){
 
-                    final messages = snapshot.data?.docs;
+                   
                     QueryDocumentSnapshot<Object> documentSnapshot =
                     snapshot.data?.docs[index];
                     return Dismissible(key: Key(index.toString()),
