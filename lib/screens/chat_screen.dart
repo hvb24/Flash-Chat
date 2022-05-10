@@ -143,7 +143,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       bottomRight: Radius.circular(30.0)
                                   ),
                                   elevation: 5.0,
-                                color: Colors.lightBlueAccent,
+                                color: isme ?Colors.lightBlueAccent: Colors.grey,
                                 child: Padding(
                                   padding:  EdgeInsets.symmetric(vertical: 8.0,horizontal: 20.0),
                                   child: Text(
