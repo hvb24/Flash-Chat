@@ -3,6 +3,7 @@ import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/Components/rounded_button.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class WelcomeScreen extends StatefulWidget {
 
@@ -23,6 +24,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     super.initState();
     controller = AnimationController( duration: Duration(seconds: 1),
     vsync: this,
+
+
     );
     // controller2 = AnimationController( duration: Duration(seconds: 1),
     //   vsync: this,
@@ -43,6 +46,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
   //
   //     });
   //   });
+    final storage = FlutterSecureStorage();
+    Future<bool> checkLoginStatus() async{
+      String value =await storage.read(key: "uid");
+      if(value==null){
+        return false;
+      }
+      return true;
+    }
   }
   @override
   Widget build(BuildContext context) {

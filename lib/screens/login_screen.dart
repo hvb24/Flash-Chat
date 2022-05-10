@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/Components/rounded_button.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 
@@ -14,6 +15,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
+  // final User user = FirebaseAuth.instance.currentUser;
+
+  final storage = new FlutterSecureStorage();
 
 String email='';
 String password='';
@@ -75,6 +79,14 @@ bool _isLoading = false;
                    try {
                     final user = await _auth.signInWithEmailAndPassword(
                     email: email, password: password);
+                    final uiD = FirebaseAuth.instance.currentUser.uid;
+                    print(uiD);
+                    // UserCredential userCred = await FirebaseAuth.instance;
+                    await storage.write(key: "uid", value: uiD);
+
+
+                    // await storage.write(key: "uid", value: UserInfo().uid);
+                    // print(user);
                    if (user != null) {
                   Navigator.pushNamed(context, ChatScreen.id);
                    }

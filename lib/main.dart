@@ -6,6 +6,7 @@ import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 // void main() => runApp(FlashChat());
@@ -17,15 +18,38 @@ void main() async {
 
 class FlashChat extends StatelessWidget {
 
+
   @override
   Widget build(BuildContext context) {
+
+    final storage = FlutterSecureStorage();
+    Future<bool> checkLoginStatus() async{
+    String value =await storage.read(key: "uid");
+    if(value==null){
+    return false;
+    }
+    return true;
+    }
 
     return MaterialApp(
 
       debugShowCheckedModeBanner: false,
 
 
-      home: WelcomeScreen(),
+      home: FutureBuilder(
+        future: checkLoginStatus(),
+        builder: (BuildContext context, AsyncSnapshot<bool>snapshot){
+        if(snapshot.data==false){
+         return LoginScreen();
+        }
+        if(snapshot.connectionState==ConnectionState.waiting){
+          return Container(
+              color: Colors.white38,
+              child: Center(child: CircularProgressIndicator()));
+        }
+        return ChatScreen();
+        },
+      ),
       initialRoute: WelcomeScreen.id,
       routes: {
         WelcomeScreen.id : (context)=>  WelcomeScreen(),
