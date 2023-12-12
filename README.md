@@ -11,8 +11,8 @@ A Flutter project that demonstrates building a real-time chat application using 
 - **User Presence:** Track online/offline status of users.
 
 ## Screenshots
+<img src="https://github.com/hvb24/Flash-Chat/assets/79647524/760a1609-e672-4d6a-a7ce-d1b723fc8e4f" width="500" height="1000" />
 
-Include some screenshots or GIFs of your app in action.
 
 ## Getting Started
 
